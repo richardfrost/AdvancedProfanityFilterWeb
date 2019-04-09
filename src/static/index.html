@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Advanced Profanity Filter App</title>
+    <link rel="stylesheet" href="w3.css">
+    <link rel="stylesheet" href="app.css">
+  </head>
+  <body>
+    <div class="w3-card-4">
+      <form action="/uploadfile" enctype="multipart/form-data" method="POST">
+        <label>Config: <input type="file" name="cfg" accept=".json"></label><br>
+        <label>File: <input type="file" name="file" accept=""></label><br>
+        <label>Summary: <input type="checkbox" class="w3-checkbox" name="generateSummary" checked></label><br>
+        <input type="submit" value="Upload">
+      </form>
+    </div>
+
+    <!-- <div class="w3-card-4">
+      <form id="configFileForm" method="POST" enctype="multipart/form-data" action="/config-upload">
+        <input type="file" id="configFile" name="configFile">
+        <input type="submit">
+
+        <div id="configHolder" class="w3-container w3-blue">
+          <h2>Config (.json)</h2>
+        </div>
+      </form>
+      <div id="cfgName"></div>
+    </div> -->
+
+    <!-- <form method="post" enctype="multipart/form-data" action="/file-upload">
+      <input type="file" name="file">
+    </form> -->
+    <!-- <div class="w3-card-4 w3-center w3-middle">
+      <div id="drag-file" class="w3-card-4 w3-purple w3-center w3-opacity">
+       <p>Drag your files here</p>
+      </div>
+    </div>
+
+    <div class="w3-card-4">
+      <div class="w3-container w3-blue w3-margin-top">
+        <h2>Summary</h2>
+      </div>
+      <div id="summaryContainer"></div>
+      </div>
+    </div>
+    <script src="index.js"></script> -->
+  </body>
+</html>

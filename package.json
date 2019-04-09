@@ -1,0 +1,31 @@
+{
+  "name": "advancedprofanityfilterweb",
+  "productName": "AdvancedProfanityFilterWeb",
+  "version": "0.9.0",
+  "description": "Advanced Profanity Filter Web",
+  "main": "dist/server.js",
+  "scripts": {
+    "build:js": "babel src --presets babel-preset-env --out-dir dist",
+    "build:static": "node bin/copyStatic.js",
+    "build": "npm run build:js && npm run build:static",
+    "start:debug": "node inspect dist/server.js",
+    "start": "node dist/server.js"
+  },
+  "keywords": [],
+  "author": "Richard Frost",
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "git+https://github.com/cthackers/adm-zip.git",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.1.4",
+    "fs-extra": "^7.0.1",
+    "multer": "^1.4.1",
+    "node-html-parser": "^1.1.13",
+    "textract": "^2.4.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
