@@ -1,0 +1,5 @@
+# Dev Dependencies
+/node_modules/*
+
+# Packaged extensions
+/dist/*
