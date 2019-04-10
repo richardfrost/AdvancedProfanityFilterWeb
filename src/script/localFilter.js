@@ -83,11 +83,8 @@ export default class LocalFilter extends Filter {
   }
 
   cleanText(file) {
-    debugger;
     let text = file.data.toString('utf8');
-    console.log(text);
     let output = this.replaceText(text);
-    console.log(output);
     return (output);
   }
 

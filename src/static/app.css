@@ -1,2 +1,21 @@
 #drag-file { height: 100px; }
 #drag-file p { padding-top: 38px; }
+
+body
+{padding-bottom:16px}
+a:hover
+{color:#2980b9}
+h4.sectionHeader
+{color:#3498db}
+#header img
+{margin-bottom:8px}
+#main
+{padding-bottom:16px}
+#menu > a:hover
+{color:#fff!important;background-color:#2980b9!important}
+.disabled
+{cursor:not-allowed!important;}
+.notes
+{margin-left:16px;padding-top:5px;font-size:10px;color:gray}
+.small
+{width:300px}
