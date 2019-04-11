@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Advanced Profanity Filter Web - Summary</title>
+    <link rel="stylesheet" type="text/css" href="w3.css">
+    <link rel="stylesheet" type="text/css" href="w3-color-flat.css"/>
+  </head>
+  <body class="w3-content w3-card">
+    <div id="header" class="w3-container">
+      <h2><a href="/"></a><img src="img/icon38.png"/> Advanced Profanity Filter Web</a></h2>
+    </div>
+
+    <div class="w3-container">
+      <h4 class="sectionHeader">Summary</h4>
+      <table class="w3-table w3-striped w3-border w3-bordered">
+        <tr class="w3-deep-purple">
+          <th>Filtered Items</th><th class="w3-right-align">Count</th>
+        </tr>
+        <% Object.keys(summary).sort().forEach(function(match) { %>
+          <tr><td><%= summary[match].sub %></td><td class="w3-right-align"><%= summary[match].count %></td></tr>
+        <% }); %>
+      </table>
+
+      <h4 class="sectionHeader">Download</h4>
+      <a href="<%= downloadHref %>">Download File</a>
+    </div>
+  </body>
+</html>

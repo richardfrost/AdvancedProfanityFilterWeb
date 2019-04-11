@@ -15,6 +15,7 @@ export default class LocalFilter extends Filter {
     let filter = this;
     let filtered = false;
     let zip = new AdmZip(file.data);
+    // let zip = new AdmZip(source);
 
     // Ensure mimetype file is first in the archive
     // Hack: add `if (a.entryName === "mimetype") {return -1}` to node_modules/adm-zip/zipFile.js
@@ -22,7 +23,6 @@ export default class LocalFilter extends Filter {
     zip.getEntries().forEach(function(zipEntry) {
       if (zipEntry.entryName.match(/^OEBPS\/.+\.xhtml$/i)) {
         let originalText = zipEntry.getData().toString('utf8');
-        // let root = parse(originalText);
         let filteredText = filter.replaceText(originalText);
         if (originalText != filteredText) {
           filtered = true;
@@ -31,37 +31,7 @@ export default class LocalFilter extends Filter {
       }
     });
 
-    if (filtered) {
-      return zip.toBuffer();
-    }
-  }
-
-  // Monkey patch to address bad zip headers
-  // Patch: replace `data.writeInt32LE(_crc & 0xFFFF, Constants.CENCRC, true);` with `data.writeUInt32LE(_crc, Constants.CENCRC);`
-  // See: https://github.com/cthackers/adm-zip/pull/267/files
-  cleanEpubFile(source, destination) {
-    let filter = this;
-    let filtered = false;
-    debugger;
-    let zip = new AdmZip(source);
-
-    // Ensure mimetype file is first in the archive
-    // Hack: add `if (a.entryName === "mimetype") {return -1}` to node_modules/adm-zip/zipFile.js
-    // See: https://github.com/cthackers/adm-zip/issues/116
-    zip.getEntries().forEach(function(zipEntry) {
-      if (zipEntry.entryName.match(/^OEBPS\/.+\.xhtml$/i)) {
-        let originalText = zipEntry.getData().toString('utf8');
-        // let root = parse(originalText);
-        let filteredText = filter.replaceText(originalText);
-        if (originalText != filteredText) {
-          filtered = true;
-          zip.updateFile(zipEntry, Buffer.alloc(Buffer.byteLength(filteredText), filteredText));
-        }
-      }
-    });
-    if (filtered) {
-      zip.writeZip(destination);
-    }
+    return filtered ? zip : false;
   }
 
   cleanOtherFile(source, destination) {
@@ -76,21 +46,25 @@ export default class LocalFilter extends Filter {
     });
   }
 
-  cleanTextFile(source, destination) {
-    let contents = fs.readFileSync(source).toString();
-    let output = this.replaceText(contents);
-    fs.writeFileSync(destination, output);
-  }
-
   cleanText(file) {
+    // let contents = fs.readFileSync(source).toString();
     let text = file.data.toString('utf8');
     let output = this.replaceText(text);
-    return (output);
+    return (this.summary != {}) ? output : false;
   }
 
-  foundMatch(word){
+  foundMatch(word) {
     super.foundMatch(word);
-    this.summary[word] = this.summary[word] ? this.summary[word] + 1 : 1;
+    if (this.summary[word]) {
+      this.summary[word].count = this.summary[word].count + 1;
+    } else {
+      this.summary[word] = { count: 1, sub: this.replaceText(word, false) };
+    }
+  }
+
+  finalizeSummary() {
+    let complete = {};
+
   }
 
   prepare() {

@@ -3,3 +3,6 @@
 
 # Packaged extensions
 /dist/*
+
+# Temporary Files
+/tmp/*

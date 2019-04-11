@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import LocalConfig from './localConfig';
 import LocalFilter from './localFilter';
@@ -6,42 +7,54 @@ export function processFile(res, file, cfg, genSummary = true) {
   const filter = new LocalFilter(LocalConfig.build(cfg));
   const fileName = file.name;
   const ext = path.extname(fileName);
-  const output = `clean-${fileName}`;
-  let result;
-  filter.summary = {};
+  const timestamp = new Date().getTime();
+  const streamOutput = `clean-${fileName}`;
+  const fileOutput = `${timestamp}-${streamOutput}`;
+  const tmpFile = `tmp/${fileOutput}`;
+  const tmpDownload = encodeURI(`download/${fileOutput}`);
 
   try {
-    if (genSummary) {
-      // TODO: Save file to /tmp
-      switch(ext.toLowerCase()) {
-        case '.epub':
-          filter.cleanEpub(file);
-          res.send(filter.summary);
-          break;
-        case '.md':
-        case '.srt':
-        case '.txt':
-          filter.cleanText(file);
-          res.send(filter.summary);
-          break;
-        default:
-          // filter.cleanOtherFile(file);
-      }
-    } else { // Stream file directly to client
-      res.attachment(output);
-      switch(ext.toLowerCase()) {
-        case '.epub':
-          result = filter.cleanEpub(file);
-          res.send(result);
-          break;
-        case '.md':
-        case '.srt':
-        case '.txt':
-          res.send(filter.cleanText(file));
-          break;
-        default:
-          filter.cleanOtherFile(f.path, output);
-      }
+    let result;
+    if (!genSummary) { res.attachment(streamOutput); }
+
+    switch(ext.toLowerCase()) {
+      case '.epub':
+        result = filter.cleanEpub(file);
+        if (result) {
+          if (genSummary) {
+            result.writeZip(tmpFile); // TODO: Error handling
+            let data = {summary: filter.summary, downloadHref: tmpDownload};
+            res.render('summary', data);
+          } else {
+            res.send(result.toBuffer());
+          }
+        } else {
+          res.send('Nothing was filtered');
+        }
+        break;
+      case '.md':
+      case '.srt':
+      case '.txt':
+        result = filter.cleanText(file);
+        if (result) {
+          if (genSummary) {
+            fs.writeFile(tmpFile, result, function(err) {
+              if (err) {
+                res.send('Error! Failed to write file');
+              } else {
+                let data = {summary: filter.summary, downloadHref: tmpDownload};
+                res.render('summary', data);
+              }
+            });
+          } else {
+            res.send(result);
+          }
+        } else {
+          res.send('Nothing was filtered');
+        }
+        break;
+      default:
+        // filter.cleanOtherFile(file);
     }
   } catch (e) {
     console.log('Error', e);
