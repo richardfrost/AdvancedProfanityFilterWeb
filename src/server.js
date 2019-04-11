@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import { processFile } from './script/app';
 
-const host = process.env.HOST || 'localhost';
+const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 4000;
 const tmp = 'tmp/';
 
@@ -62,5 +62,5 @@ app.get('/download/:name', function(req, res){
 });
 
 app.listen(port, host, function () {
-  console.log(`Server running at http://${host}:${port}`);
+  console.log(`Server running at http://${host.replace('0.0.0.0', 'localhost')}:${port}`);
 });
