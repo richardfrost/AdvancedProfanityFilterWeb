@@ -1,31 +1,34 @@
-import fs from 'fs';
+import fse from 'fs-extra';
 import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import { processFile } from './script/app';
+import favicon from 'serve-favicon';
 
 const host = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 4000;
 const tmp = 'tmp/';
 
 console.log(`Preparing ${tmp} directory...`);
-if (fs.existsSync(tmp)) {
-  fs.readdirSync(tmp).forEach((file) => {
-    fs.unlinkSync(path.join(tmp, file));
-  });
-} else {
-  fs.mkdirSync(tmp);
-}
+fse.emptyDirSync(tmp);
 
+console.log('Starting app...')
 const app = express();
 app.disable('x-powered-by');
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(fileUpload());
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(fileUpload(
+  {limits: { fileSize: 5 * 1024 * 1024 },
+}));
+
+app.get(['/', '/index.html'], (req, res, next) => {
+  res.render('pages/index');
+});
 
 app.post('/uploadfile', (req, res, next) => {
   if (req.files && req.files.file) {
@@ -45,7 +48,7 @@ app.post('/uploadfile', (req, res, next) => {
   }
 });
 
-app.get('/download/:name', function(req, res){
+app.get('/download/:name', function(req, res) {
   // TODO: Throw error if no name?
   var file = path.join('tmp', req.params.name);
   res.download(file, req.params.name.replace(/^\d+-/, ''), function(err) {
@@ -53,7 +56,7 @@ app.get('/download/:name', function(req, res){
       // TODO: Handle error
     }
     console.log(`Removing file ${file}`);
-    fs.unlink(file, function(err) {
+    fse.unlink(file, function(err) {
       if (err) {
         // TODO: Handle error
       }

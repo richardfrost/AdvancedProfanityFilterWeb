@@ -1,13 +1,14 @@
-#drag-file { height: 100px; }
-#drag-file p { padding-top: 38px; }
-
 body
 {padding-bottom:16px}
 /* w3-light-grey */
 a:hover
 {color:#2980b9}
+a.w3-btn:active, a.w3-btn:hover, a.w3-btn:link, a.w3-btn:visited
+{color: #fff}
 h4.sectionHeader
 {color:#3498db}
+#header a
+{color:black;text-decoration:none;}
 #header img
 {margin-bottom:8px}
 #main

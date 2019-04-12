@@ -1,5 +1,5 @@
 # Advanced Profanity Filter Web
-This is a project that helps remove profanity from files. It uses the same filter engine and configuration as the browser extension: [Advanced Profanity Filter](https://github.com/richardfrost/AdvancedProfanityFilter).
+This is a project that helps remove profanity from files. It uses the same filter engine and configuration as the browser extension: [Advanced Profanity Filter](https://github.com/richardfrost/AdvancedProfanityFilter#advanced-profanity-filter).
 
 ### Supported File Types
 - `.ePUB` (Ebook)

@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>Advanced Profanity Filter Web - Summary</title>
-    <link rel="stylesheet" type="text/css" href="w3.css">
-    <link rel="stylesheet" type="text/css" href="w3-color-flat.css"/>
+    <% include ../partials/head %>
   </head>
+
   <body class="w3-content w3-card">
-    <div id="header" class="w3-container">
-      <h2><a href="/"></a><img src="img/icon38.png"/> Advanced Profanity Filter Web</a></h2>
-    </div>
+    <% include ../partials/header %>
 
     <div class="w3-container">
       <h4 class="sectionHeader">Summary</h4>
@@ -22,8 +18,10 @@
         <% }); %>
       </table>
 
-      <h4 class="sectionHeader">Download</h4>
-      <a href="<%= downloadHref %>">Download File</a>
+      <div style="padding-top:30px;text-align:center;">
+        <a class="w3-btn w3-round-large w3-flat-peter-river" href="<%= downloadHref %>">Download File</a>
+        <a class="w3-btn w3-round-large w3-flat-silver" href="/">Start over</a>
+      </div>
     </div>
   </body>
 </html>

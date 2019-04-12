@@ -24,7 +24,7 @@ export function processFile(res, file, cfg, genSummary = true) {
           if (genSummary) {
             result.writeZip(tmpFile); // TODO: Error handling
             let data = {summary: filter.summary, downloadHref: tmpDownload};
-            res.render('summary', data);
+            res.render('pages/summary', data);
           } else {
             res.send(result.toBuffer());
           }
@@ -43,7 +43,7 @@ export function processFile(res, file, cfg, genSummary = true) {
                 res.send('Error! Failed to write file');
               } else {
                 let data = {summary: filter.summary, downloadHref: tmpDownload};
-                res.render('summary', data);
+                res.render('pages/summary', data);
               }
             });
           } else {

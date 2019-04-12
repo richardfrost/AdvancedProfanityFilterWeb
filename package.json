@@ -8,6 +8,7 @@
     "build:js": "babel src --presets babel-preset-env --out-dir dist",
     "build:static": "node bin/copyStatic.js",
     "build": "npm run build:js && npm run build:static",
+    "clean": "node bin/cleanDist.js",
     "start:debug": "node --inspect-brk dist/server.js",
     "start": "node dist/server.js"
   },
@@ -23,6 +24,7 @@
     "fs-extra": "^7.0.1",
     "multer": "^1.4.1",
     "node-html-parser": "^1.1.13",
+    "serve-favicon": "^2.5.0",
     "textract": "^2.4.0"
   },
   "devDependencies": {
