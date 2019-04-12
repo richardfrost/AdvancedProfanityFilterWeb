@@ -1,5 +1,5 @@
 * eol=lf
-# *.ico binary
+*.ico binary
 *.jpg binary
 *.png binary
 

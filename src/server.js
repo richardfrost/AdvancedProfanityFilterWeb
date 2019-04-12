@@ -22,8 +22,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(fileUpload(
-  {limits: { fileSize: 5 * 1024 * 1024 },
+app.use(fileUpload({
+  abortOnLimit: true,
+  limits: { fileSize: 5 * 1024 * 1024 },
 }));
 
 app.get(['/', '/index.html'], (req, res, next) => {
