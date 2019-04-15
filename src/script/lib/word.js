@@ -14,6 +14,9 @@ export default class Word {
                 // /(^|[\s.,'"+!?|-]+)(word)([\s.,'"+!?|-]+|$)/giu
                 return new RegExp('(^|' + Word._unicodeWordBoundary + '+)(' + Word.processPhrase(str, matchRepeated) + ')(' + Word._unicodeWordBoundary + '+|$)', 'giu');
             }
+            else if (str.match(Word._edgePunctuationRegExp)) { // Begin or end with punctuation (not \w))
+                return new RegExp('(^|\\s)(' + Word.processPhrase(str, matchRepeated) + ')(\\s|$)', 'giu');
+            }
             else {
                 return new RegExp('\\b' + Word.processPhrase(str, matchRepeated) + '\\b', 'gi');
             }
@@ -41,6 +44,9 @@ export default class Word {
                 // /(^|[\s.,'"+!?|-]+)(word)([\s.,'"+!?|-]+|$)/giu
                 return new RegExp('(^|' + Word._unicodeWordBoundary + ')(' + Word.processPhrase(str, matchRepeated) + ')(' + Word._unicodeWordBoundary + '|$)', 'giu');
             }
+            else if (str.match(Word._edgePunctuationRegExp)) { // Begin or end with punctuation (not \w))
+                return new RegExp('(^|\\s)(' + Word.processPhrase(str, matchRepeated) + ')(\\s|$)', 'giu');
+            }
             else {
                 return new RegExp('\\s?\\b' + Word.processPhrase(str, matchRepeated) + '\\b\\s?', 'gi');
             }
@@ -57,6 +63,9 @@ export default class Word {
                 // Work around for lack of word boundary support for unicode characters
                 // /(^|[\s.,'"+!?|-]?)[\w-]*(word)[\w-]*([\s.,'"+!?|-]?|$)/giu
                 return new RegExp('(^|' + Word._unicodeWordBoundary + '?)([\\w-]*' + Word.processPhrase(str, matchRepeated) + '[\\w-]*)(' + Word._unicodeWordBoundary + '?|$)', 'giu');
+            }
+            else if (str.match(Word._edgePunctuationRegExp)) { // Begin or end with punctuation (not \w))
+                return new RegExp('(^|\\s)([\\w-]*' + Word.processPhrase(str, matchRepeated) + '[\\w-]*)(\\s|$)', 'giu');
             }
             else {
                 return new RegExp('\\s?\\b[\\w-]*' + Word.processPhrase(str, matchRepeated) + '[\\w-]*\\b\\s?', 'gi');
@@ -75,6 +84,9 @@ export default class Word {
                 // (^|[\s.,'"+!?|-]*)([\S]*куче[\S]*)([\s.,'"+!?|-]*|$)/giu
                 return new RegExp('(^|' + Word._unicodeWordBoundary + '*)([\\S]*' + Word.processPhrase(str, matchRepeated) + '[\\S]*)(' + Word._unicodeWordBoundary + '*|$)', 'giu');
             }
+            else if (str.match(Word._edgePunctuationRegExp)) { // Begin or end with punctuation (not \w))
+                return new RegExp('(^|\\s)([\\S]*' + Word.processPhrase(str, matchRepeated) + '[\\S]*)(\\s|$)', 'giu');
+            }
             else {
                 return new RegExp('\\b[\\w-]*' + Word.processPhrase(str, matchRepeated) + '[\\w-]*\\b', 'gi');
             }
@@ -92,9 +104,9 @@ export default class Word {
     static containsDoubleByte(str) {
         if (!str.length)
             return false;
-        if (str.charCodeAt(0) > 255)
+        if (str.charCodeAt(0) > 127)
             return true;
-        return Word._unicodeRegex.test(str);
+        return Word._unicodeRegExp.test(str);
     }
     // /[-\/\\^$*+?.()|[\]{}]/g
     // /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g
@@ -132,8 +144,9 @@ export default class Word {
         }
     }
 }
+Word._edgePunctuationRegExp = /(^[,.'"!?%$]|[,.'"!?%$]$)/;
 Word._escapeRegExp = /[\/\\^$*+?.()|[\]{}]/g;
-Word._unicodeRegex = /[^\u0000-\u00ff]/;
+Word._unicodeRegExp = /[^\u0000-\u00ff]/;
 Word._unicodeWordBoundary = '[\\s.,\'"+!?|-]';
 Word.nonWordRegExp = new RegExp('^\\s*[^\\w]+\\s*$', 'g');
 Word.whitespaceRegExp = /^\s+$/;

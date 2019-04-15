@@ -9,6 +9,15 @@ export function dynamicList(list, selectEm, title) {
     }
     document.getElementById(selectEm).innerHTML = options;
 }
+export function escapeHTML(str) {
+    return str.replace(/([<>&"'])/g, (match, p1) => ({
+        '<': '&lt;',
+        '>': '&gt;',
+        '&': '&amp;',
+        '"': '&quot;',
+        "'": '&apos;'
+    }[p1]));
+}
 export function exportToFile(dataStr, fileName = 'data.txt') {
     let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
     let linkElement = document.createElement('a');
@@ -38,6 +47,13 @@ export function isVersionOlder(version, minimum) {
         return true;
     }
     return false;
+}
+export function readFile(file) {
+    return new Promise((resolve, reject) => {
+        let fr = new FileReader();
+        fr.onload = () => { resolve(fr.result); };
+        fr.readAsText(file);
+    });
 }
 export function removeFromArray(array, element) {
     return array.filter(e => e !== element);
