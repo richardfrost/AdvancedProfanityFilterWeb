@@ -14,7 +14,7 @@
           <th>Filtered Items</th><th class="w3-right-align">Count</th>
         </tr>
         <% Object.keys(summary).sort().forEach(function(match) { %>
-          <tr><td><%= summary[match].sub %></td><td class="w3-right-align"><%= summary[match].count %></td></tr>
+          <tr><td><%= summary[match].filtered %></td><td class="w3-right-align"><%= summary[match].count %></td></tr>
         <% }); %>
       </table>
 

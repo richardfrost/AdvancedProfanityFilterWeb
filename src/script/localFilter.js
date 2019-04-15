@@ -87,9 +87,16 @@ export default class LocalFilter extends Filter {
   foundMatch(word) {
     super.foundMatch(word);
     if (this.summary[word]) {
-      this.summary[word].count = this.summary[word].count + 1;
+      this.summary[word].count += 1;
     } else {
-      this.summary[word] = { count: 1, sub: this.replaceText(word, false) };
+      let filtered;
+      if (this.cfg.words[word].matchMethod == 4) { // Regexp
+        filtered = this.cfg.words[word].sub || this.cfg.defaultSubstitution;
+      } else {
+        filtered = this.replaceText(word, false);
+      }
+
+      this.summary[word] = { filtered: filtered, count: 1 };
     }
   }
 
