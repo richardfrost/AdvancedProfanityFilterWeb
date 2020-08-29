@@ -16,7 +16,7 @@
   "author": "Richard Frost",
   "license": "MIT",
   "dependencies": {
-    "adm-zip": "0.4.16",
+    "adm-zip": "richardfrost/adm-zip#master",
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
