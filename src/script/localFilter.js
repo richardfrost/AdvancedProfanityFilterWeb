@@ -1,4 +1,5 @@
-import {Filter} from './lib/filter';
+import Constants from './lib/constants';
+import Filter from './lib/filter';
 import AdmZip from 'adm-zip';
 import textract from 'textract';
 import { parse } from 'node-html-parser';
@@ -8,7 +9,7 @@ export default class LocalFilter extends Filter {
     super();
     this.summary = {};
     this.cfg = config;
-    this.prepare();
+    this.init();
   }
 
   // Main file: word/document.xml
@@ -86,24 +87,17 @@ export default class LocalFilter extends Filter {
 
   foundMatch(word) {
     super.foundMatch(word);
-    if (this.summary[word]) {
-      this.summary[word].count += 1;
+    if (this.summary[word.value]) {
+      this.summary[word.value].count += 1;
     } else {
       let filtered;
-      if (this.cfg.words[word].matchMethod == 4) { // Regexp
-        filtered = this.cfg.words[word].sub || this.cfg.defaultSubstitution;
+      if (word.matchMethod == Constants.MatchMethods.Regex) { // Regexp
+        filtered = word.sub || this.cfg.defaultSubstitution;
       } else {
-        filtered = this.replaceText(word, false);
+        filtered = this.replaceText(word.value, 0, false);
       }
 
-      this.summary[word] = { filtered: filtered, count: 1 };
+      this.summary[word.value] = { filtered: filtered, count: 1 };
     }
-  }
-
-  prepare() {
-    this.generateWordList();
-    this.wordRegExps = [];
-    this.generateRegexpList();
-    this.summary = {};
   }
 }
