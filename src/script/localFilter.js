@@ -40,9 +40,10 @@ export default class LocalFilter extends Filter {
     let zip = new AdmZip(file.data);
     // let zip = new AdmZip(source);
 
-    // Ensure mimetype file is first in the archive
-    // Hack: add `if (a.entryName === "mimetype") {return -1}` to node_modules/adm-zip/zipFile.js
-    // See: https://github.com/cthackers/adm-zip/issues/116
+    // To be a valid epub, the `mimetype` file must be the first in the archive
+    // As of ADM-ZIP version 0.4.16 we have to modify the code to make sure this happens:
+    // Add the following code as the first line in the sort compareFunction in node_modules/adm-zip/zipFile.js inside the compressToBuffer() function
+    // ```if (a.entryName === 'mimetype') { return -1; } else if (b.entryName === 'mimetype') { return 1; }```
     zip.getEntries().forEach(function(zipEntry) {
       if (zipEntry.entryName.match(/^OEBPS\/.+\.xhtml$/i)) {
         let originalText = zipEntry.getData().toString('utf8');
