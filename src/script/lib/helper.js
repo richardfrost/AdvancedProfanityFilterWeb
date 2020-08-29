@@ -1,13 +1,13 @@
 /* istanbul ignore next */
-export function dynamicList(list, selectEm, title) {
-    let options = '';
-    if (title !== undefined) {
-        options = '<option value="" disabled selected>' + title + '</option>';
-    }
-    for (let i = 0; i < list.length; i++) {
-        options += '<option value="' + list[i] + '">' + list[i] + '</option>';
-    }
-    document.getElementById(selectEm).innerHTML = options;
+export function dynamicList(list, select, title) {
+    removeChildren(select);
+    let array = title !== undefined ? [title].concat(list) : list;
+    array.forEach(item => {
+        let option = document.createElement('option');
+        option.value = (title && item === title) ? '' : item;
+        option.textContent = item;
+        select.appendChild(option);
+    });
 }
 export function escapeHTML(str) {
     return str.replace(/([<>&"'])/g, (match, p1) => ({
@@ -26,6 +26,26 @@ export function exportToFile(dataStr, fileName = 'data.txt') {
     linkElement.click();
     linkElement.remove();
 }
+// Format numbers up to 1B to be 4 characters or less
+export function formatNumber(number) {
+    let length = number.toString().length;
+    if (length <= 3) { // 0 - 999
+        return number.toString();
+    }
+    else if (length <= 6) { // 1,000 - 999,999
+        let n = (number / 1000).toPrecision();
+        let index = n.indexOf('.');
+        return ((index >= -1 && index <= 1) ? n.substr(0, 3) : n.substr(0, index)) + 'k';
+    }
+    else if (length <= 9) { // 1,000,000 - 999,999,999
+        let n = (number / 1000000).toPrecision();
+        let index = n.indexOf('.');
+        return ((index >= -1 && index <= 1) ? n.substr(0, 3) : n.substr(0, index)) + 'M';
+    }
+    else { // >= 1,000,000,000
+        return '1G+';
+    }
+}
 // /^\d+\.\d+\.\d+$/
 export function getVersion(version) {
     let versionValues = version.split('.');
@@ -35,7 +55,7 @@ export function getVersion(version) {
         patch: parseInt(versionValues[2])
     };
 }
-// Is the provided version lower than or equal to the minimum version?
+// Is the provided version lower than the minimum version?
 export function isVersionOlder(version, minimum) {
     if (version.major < minimum.major) {
         return true;
@@ -43,7 +63,7 @@ export function isVersionOlder(version, minimum) {
     else if (version.major == minimum.major && version.minor < minimum.minor) {
         return true;
     }
-    else if (version.major == minimum.major && version.minor == minimum.minor && version.patch <= minimum.patch) {
+    else if (version.major == minimum.major && version.minor == minimum.minor && version.patch < minimum.patch) {
         return true;
     }
     return false;
@@ -54,6 +74,13 @@ export function readFile(file) {
         fr.onload = () => { resolve(fr.result); };
         fr.readAsText(file);
     });
+}
+export function removeChildren(element) {
+    if (element.hasChildNodes) {
+        while (element.firstChild) {
+            element.firstChild.remove();
+        }
+    }
 }
 export function removeFromArray(array, element) {
     return array.filter(e => e !== element);
