@@ -45,7 +45,7 @@ export default class LocalFilter extends Filter {
     // Add the following code as the first line in the sort compareFunction in node_modules/adm-zip/zipFile.js inside the compressToBuffer() function
     // ```if (a.entryName === 'mimetype') { return -1; } else if (b.entryName === 'mimetype') { return 1; }```
     zip.getEntries().forEach(function(zipEntry) {
-      if (zipEntry.entryName.match(/^OEBPS\/.+\.xhtml$/i)) {
+      if (zipEntry.entryName.match(/^.+\.x?html$/i)) {
         let originalText = zipEntry.getData().toString('utf8');
         let filteredText = filter.replaceText(originalText);
         if (originalText != filteredText) {
