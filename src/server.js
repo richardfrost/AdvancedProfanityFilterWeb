@@ -52,6 +52,7 @@ app.post('/uploadfile', (req, res, next) => {
 app.get('/download/:name', function(req, res) {
   // TODO: Throw error if no name?
   var file = path.join('tmp', req.params.name);
+  console.log(`User started downloading file ${file}`);
   res.download(file, req.params.name.replace(/^\d+-/, ''), function(err) {
     if (err) {
       // TODO: Handle error
